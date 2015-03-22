@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 5f1559920ccdd2041824c9540cbb4e4c
+timeCreated: 1426893743
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - paused: {instanceID: 0}
+  - bulletPrefab: {fileID: 160658, guid: b1a8a4a175a420347b925fb083005ba3, type: 2}
+  - player: {instanceID: 0}
+  - gameSoundSource: {instanceID: 0}
+  - gameMusicSource: {instanceID: 0}
+  - startGame: {instanceID: 0}
+  - menuMusic: {instanceID: 0}
+  - inGameMusic: {instanceID: 0}
+  - gameOverMusic: {instanceID: 0}
+  - pauseSound: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
