@@ -3,9 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class AITarget : MonoBehaviour {
-	int health;
 	public Canvas myCanvas;
-	bool inSafeZone;
+	public bool inSafeZone;
+	public Transform mySpawnPoint;
 	public GameObject player;
 	public AudioClip[] spottedPlayerBarks,lostPlayerBarks, safeSounds;
 	public static int spottedProgress,lostPlayerProgress;
@@ -22,8 +22,17 @@ public class AITarget : MonoBehaviour {
 		nearPlayer,
 		safe
 	}
+	void OnEnable(){
+		targetScale = Vector3.one;
+		if (mySpawnPoint) {
+			transform.position = mySpawnPoint.position;
+			transform.localScale = Vector3.one;
+			transform.rotation = mySpawnPoint.rotation;
+		}
+	}
 	AIState ai = AIState.idle;
 	void Start(){
+		mySpawnPoint = this.transform;
 		inSafeZone = false;
 		myCanvas.enabled = false;
 		targetScale = Vector3.one;
@@ -32,7 +41,6 @@ public class AITarget : MonoBehaviour {
 		anim.SetBool ("isWalking", false);
 		myNavMesh = GetComponent<NavMeshAgent> ();
 		aiSound = gameObject.GetComponent<AudioSource> ();
-		health = 100;
 	}
 
 	void Update(){
@@ -63,6 +71,11 @@ public class AITarget : MonoBehaviour {
 			}
 			break;
 		case AIState.safe:
+			meltTimer +=Time.deltaTime;
+			if(meltTimer>=3){
+				gameObject.SetActive(false);
+				transform.position = mySpawnPoint.position;
+			}
 			targetScale = Vector3.one;
 			break;
 		}
@@ -84,7 +97,7 @@ public class AITarget : MonoBehaviour {
 		transform.localScale = Vector3.Lerp (transform.localScale, targetScale, Time.deltaTime);
 		if (transform.localScale.y < 0.5f) {
 			GameManager.snowMenMelted++;
-			Destroy(this.gameObject);
+			this.gameObject.SetActive(false);
 		}
 	}
 
@@ -104,16 +117,16 @@ public class AITarget : MonoBehaviour {
 		ai = AIState.nearPlayer;
 
 	}
-	void GoToSafeZone(bool safety){
-		if (safety) {
-			ai = AIState.safe;
-			anim.SetBool("isWalking",false);
-			myNavMesh = transform.position;
-			SetClip(safeSounds[Random.Range(0,safeSounds.Length)]);
-		}
+	public void GoToSafeZone(){
+		ai = AIState.safe;
+		GameManager.snowMenSaved++;
+		anim.SetBool("isWalking",false);
+		myNavMesh.destination = this.transform.position;
+		SetClip(safeSounds[Random.Range(0,safeSounds.Length)]);
+
 	}
 	void GoToSeeingPlayer(){
-
+		meltTimer = 0;
 		myCanvas.enabled = false;
 		anim.SetBool("isWalking",true);
 		myNavMesh.destination = player.transform.position;

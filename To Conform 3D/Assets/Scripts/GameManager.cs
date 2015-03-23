@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 	public bool gameOver = false;
-	List<GameObject> bullets;
 	public Text paused,snowMenMeltedText,snowMenSavedText;
 	Player playerScript;
+	public List<GameObject> snowMen;
 	public static int score, snowMenMelted,snowMenSaved;
 	public static GameObject instance,b;
-	public GameObject bulletPrefab, player;
+	public GameObject snowman, player;
 	public float startTime,timeInGame;
 	public AudioSource gameSoundSource, gameMusicSource;
 	public AudioClip startGame,menuMusic,inGameMusic,gameOverMusic,pauseSound;
@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour {
 	GameState currentState = GameState.mainMenu;
 	void Start(){
 		snowMenMelted = 0;
-
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		if (instance == null)
@@ -34,8 +33,10 @@ public class GameManager : MonoBehaviour {
 		playerScript = player.GetComponent<Player> ();
 	}
 	void Update(){
+		Debug.Log("MELTED " +snowMenMelted + " SAVED "+snowMenSaved);
 		switch (currentState) {
 		case GameState.mainMenu:
+			player.transform.position = Vector3.up;
 			snowMenMeltedText.text = "";
 			paused.text = "The Snowman Shepard\nPress Enter To Start";
 			Time.timeScale = 0;
@@ -50,12 +51,13 @@ public class GameManager : MonoBehaviour {
 			break;
 
 		case GameState.game:
+			TriggerNarritive.canPlay = true;
 			GameOver();
 			if(snowMenMelted>0){
 				snowMenMeltedText.text = "Snowmen Melted: "+snowMenMelted;
 			}
 
-			paused.text = "I\n---+---\nI";
+			paused.text = "";
 			Zoom();
 			if(Input.GetKeyDown(KeyCode.Escape)){
 				Time.timeScale = 0;
@@ -79,12 +81,14 @@ public class GameManager : MonoBehaviour {
 			}
 			if(Input.GetKeyDown(KeyCode.Return)){
 				gameOver = true;
+				paused.text = "GAME OVER";
+				currentState = GameState.gameOver;
 			}
 			break;
 
 
 		case GameState.gameOver:
-			paused.text = "GAME OVER";
+			TriggerNarritive.canPlay = false;
 			Camera.main.fieldOfView = 60;
 			if(Input.GetKeyDown(KeyCode.Return)){
 				ResetGame();
@@ -104,7 +108,12 @@ public class GameManager : MonoBehaviour {
 	}
 	void GameOver(){
 		if (snowMenSaved+snowMenMelted >= 10) {
+			if(snowMenMelted!=0&&snowMenSaved!=0)
 			paused.text = "Game Over\n"+"Your Score: "+(snowMenSaved/snowMenMelted*100+timeInGame);
+			else if (snowMenSaved==0)
+				paused.text = "GameOver\n"+"Why did you kill them all?";
+			else if (snowMenMelted == 0)
+				paused.text = "Game Over\n"+"Perfect Game In "+timeInGame+" Secs";
 			gameOver = true;
 		}
 	}
@@ -112,7 +121,20 @@ public class GameManager : MonoBehaviour {
 	void ResetGame(){
 		snowMenSaved = 0;
 		snowMenMelted = 0;
-		Application.LoadLevel (Application.loadedLevel);
+		for (int i=0; i<snowMen.Count; i++) {
+			if(snowMen[i].activeInHierarchy == false){
+				snowMen[i].SetActive(true);
+				AITarget snowManScript = snowMen[i].GetComponent<AITarget>();
+				snowMen[i].transform.position = snowManScript.mySpawnPoint.position;
+				snowMen[i].transform.localScale = Vector3.one;
+				snowMen[i].transform.rotation = snowManScript.mySpawnPoint.rotation;
+			}else{
+				AITarget snowManScript = snowMen[i].GetComponent<AITarget>();
+				snowMen[i].transform.position = snowManScript.mySpawnPoint.position;
+				snowMen[i].transform.localScale = Vector3.one;
+				snowMen[i].transform.rotation = snowManScript.mySpawnPoint.rotation;
+			}
+		}
 		gameOver = false;
 	}
 	public void PlayClip(AudioClip clip,AudioSource source){

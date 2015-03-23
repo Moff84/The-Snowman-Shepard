@@ -2,21 +2,22 @@
 using System.Collections;
 
 public class Player : MonoBehaviour{
-	public float health;
-	public float playerHeight;
-	// Use this for initialization
-	void Start () {
-		health = 100;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		//StandOnTerrain ();
-	}
-	void StandOnTerrain(){
-		float placeOnMap = Terrain.activeTerrain.SampleHeight (transform.position);
-		if (transform.position.y <= placeOnMap + playerHeight) {
-			transform.position = new Vector3(this.transform.position.x,placeOnMap+playerHeight,this.transform.position.z);
-		}
-	}
+//	int snowMenMelted, snowMenSaved;
+//	public AudioClip[] meltedSound, savedSound;
+//	AudioSource sound;
+//	void Start(){
+//		sound = GetComponent<AudioSource> ();
+//		snowMenSaved = GameManager.snowMenSaved;
+//		snowMenMelted = GameManager.snowMenMelted;
+//	}
+//	void Update(){
+//		if (snowMenMelted < GameManager.snowMenMelted) {
+//			sound.PlayOneShot(meltedSound[snowMenMelted]);
+//			snowMenMelted = GameManager.snowMenMelted;
+//		}
+//		if (snowMenSaved < GameManager.snowMenSaved) {
+//			sound.PlayOneShot(savedSound[snowMenSaved]);
+//			snowMenSaved = GameManager.snowMenSaved;
+//		}
+//	}
 }

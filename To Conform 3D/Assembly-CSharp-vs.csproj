@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\PlayerShoot.cs" />
      <Compile Include="Assets\Scripts\Spawner.cs" />
+     <Compile Include="Assets\Scripts\TriggerNarritive.cs" />
      <Compile Include="Assets\Scripts\bulletMove.cs" />
      <Compile Include="Assets\Scripts\shoot.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
