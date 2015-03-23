@@ -129,7 +129,10 @@ public class AITarget : MonoBehaviour {
 		myNavMesh.destination = player.transform.position;
 		ai = AIState.seeingPlayer;
 	}
-	void ResetSnowman(){			//when snowman dies
+	void ResetSnowman(){
+		//when snowman dies
+		if(aiSound)
+		aiSound.pitch = 1;
 		if(anim)
 		anim.SetBool ("isWalking", false);
 		ai = AIState.idle;

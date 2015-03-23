@@ -109,10 +109,10 @@ public class GameManager : MonoBehaviour {
 	void GameOver(){
 		if (snowMenSaved+snowMenMelted >= 10) {		//once all ten snowmen are dealt with end game and display text
 			if(snowMenMelted!=0&&snowMenSaved!=0)
-			menuText.text = "Game Over\n"+"Your Score: "+(snowMenSaved/snowMenMelted*100+timeInGame);
-			else if (snowMenSaved==0)
+			menuText.text = "Game Over\n"+"Try saving them all next time";
+			else if (snowMenMelted!=0)
 				menuText.text = "GameOver\n"+"Why did you kill them all?";
-			else if (snowMenMelted == 0)
+			else if (snowMenSaved != 0)
 				menuText.text = "Game Over\n"+"Perfect Game In "+timeInGame+" Secs";
 
 			gameOver = true;
