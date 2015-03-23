@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour {
 	}
 	void Update(){
 		switch (currentState) {								//menu state machine. see diagram
-		case GameState.mainMenu:
+		case GameState.mainMenu:							//MAIN MENU
 			player.transform.position = Vector3.up;			//player spawn point happens to be (0,1,0)
 			snowMenMeltedText.text = "";					//no score text in main menu
 			snowMenSavedText.text = "";						//          """"""""""
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour {
 			}
 			break;
 
-		case GameState.game:
+		case GameState.game:		//IN GAME
 			GameOver();							//looks for gameOver condition
 			if(snowMenMelted>0){											//show UI
 				snowMenMeltedText.text = "Snowmen Melted: "+snowMenMelted;
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour {
 			}
 			break;
 
-		case GameState.paused:
+		case GameState.paused:		//PAUSED STATE
 			snowMenMeltedText.text = "";
 			menuText.text = "Paused";
 			if(Input.GetKeyDown(KeyCode.Escape)){
@@ -88,8 +88,8 @@ public class GameManager : MonoBehaviour {
 			break;
 
 
-		case GameState.gameOver:
-			Camera.main.fieldOfView = 60;
+		case GameState.gameOver:				//GAME OVER
+			Camera.main.fieldOfView = 60; //if i was zooming then reset the zoom
 			if(Input.GetKeyDown(KeyCode.Return)){
 				ResetGame();
 				PlayClip(menuMusic,gameMusicSource);
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	void Zoom(){
+	void Zoom(){		//not necessary but why not. click right mouse and a little zoom in
 		if (Input.GetMouseButton (1)) {
 			Camera.main.fieldOfView = Mathf.Lerp (Camera.main.fieldOfView, 40, Time.deltaTime*5);
 		} else
@@ -119,29 +119,17 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	void ResetGame(){
+	void ResetGame(){		//for restarting the game on gameover
 		snowMenSaved = 0;
 		snowMenMelted = 0;
 		for (int i=0; i<snowMen.Count; i++) {
 			if(!snowMen[i].activeInHierarchy){
 				snowMen[i].SetActive(true);
-//				AITarget snowManScript = snowMen[i].GetComponent<AITarget>();
-//				snowManScript.targetScale = Vector3.one;
-//				snowMen[i].transform.position = snowManScript.mySpawnPoint.position;
-//				snowMen[i].transform.localScale = Vector3.one;
-//				snowMen[i].transform.rotation = snowManScript.mySpawnPoint.rotation;
-//				snowMen[i].SetActive(true);
-			}else{
-				Debug.Log("Thought snowman"+i+" was alive");
-//				AITarget snowManScript = snowMen[i].GetComponent<AITarget>();
-//				snowMen[i].transform.position = snowManScript.mySpawnPoint.position;
-//				snowMen[i].transform.localScale = Vector3.one;
-//				snowMen[i].transform.rotation = snowManScript.mySpawnPoint.rotation;
 			}
 		}
 		gameOver = false;
 	}
-	public void PlayClip(AudioClip clip,AudioSource source){
+	public void PlayClip(AudioClip clip,AudioSource source){ // for playin sounds
 		source.clip = clip;
 		source.Play ();
 	}

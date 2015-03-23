@@ -1,12 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AITarget.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameManager.cs">
     <Files>
-      <File FileName="Assets\Scripts\GameManager.cs" Line="128" Column="9" />
-      <File FileName="Assets\Scripts\AITarget.cs" Line="136" Column="28" />
-      <File FileName="Assets\Scripts\Player.cs" Line="5" Column="1" />
-      <File FileName="Assets\Scripts\Spawner.cs" Line="4" Column="13" />
-      <File FileName="Assets\Scripts\shoot.cs" Line="3" Column="13" />
+      <File FileName="Assets\Scripts\GameManager.cs" Line="38" Column="45" />
+      <File FileName="Assets\Scripts\AITarget.cs" Line="42" Column="131" />
       <File FileName="Assets\Scripts\TriggerNarritive.cs" Line="8" Column="74" />
     </Files>
   </MonoDevelop.Ide.Workbench>

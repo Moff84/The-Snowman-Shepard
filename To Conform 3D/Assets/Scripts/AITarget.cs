@@ -39,7 +39,7 @@ public class AITarget : MonoBehaviour {
 	}
 
 	void Update(){
-		distanceToPlayer = Vector3.Distance (player.transform.position, this.transform.position);
+		distanceToPlayer = Vector3.Distance (player.transform.position, this.transform.position); // use this to check if player is near
 		switch (ai) {
 		case AIState.idle:					//     IDLE PLAYER
 			timeSinceLostPlayer+=Time.deltaTime;
@@ -65,7 +65,7 @@ public class AITarget : MonoBehaviour {
 				GoToNearPlayer();
 			}
 			break;
-		case AIState.safe:
+		case AIState.safe:				//	SAFE ZONE
 			meltTimer +=Time.deltaTime;
 			if(meltTimer>=3){
 				ResetSnowman();
@@ -76,14 +76,14 @@ public class AITarget : MonoBehaviour {
 			break;
 		}
 	}
-	void SetClip(AudioClip clip){
+	void SetClip(AudioClip clip){		//for sounds
 		aiSound.clip = clip;
 		if (aiSound.isPlaying == false)
 			aiSound.PlayOneShot (clip);
 
 	}
 
-	void Melt(){
+	void Melt(){						//reduce scale and die if scale is too low
 		meltTimer -= Time.deltaTime;
 		if (meltTimer < 0) {
 			targetScale-=new Vector3(-0.05f,0.05f,-0.05f);
@@ -98,7 +98,7 @@ public class AITarget : MonoBehaviour {
 		}
 	}
 
-	void GoToIdle(){
+	void GoToIdle(){ // function for transition to idle for use by any script
 		myCanvas.enabled = false;
 		anim.SetBool ("isWalking", false);
 		myNavMesh.destination = this.transform.position;
@@ -106,7 +106,7 @@ public class AITarget : MonoBehaviour {
 		SetClip(lostPlayerBarks[Random.Range(0,lostPlayerBarks.Length)]);
 		ai = AIState.idle;
 	}
-	void GoToNearPlayer(){
+	void GoToNearPlayer(){	//for transition to near player
 		myCanvas.enabled = true;
 		anim.SetBool ("isWalking", false);
 		myNavMesh.destination = this.transform.position;
@@ -114,7 +114,7 @@ public class AITarget : MonoBehaviour {
 		ai = AIState.nearPlayer;
 
 	}
-	public void GoToSafeZone(){
+	public void GoToSafeZone(){		// called on trigger in triggernarrative script
 		ai = AIState.safe;
 		GameManager.snowMenSaved++;
 		anim.SetBool("isWalking",false);
@@ -122,14 +122,14 @@ public class AITarget : MonoBehaviour {
 		SetClip(safeSounds[Random.Range(0,safeSounds.Length)]);
 
 	}
-	void GoToSeeingPlayer(){
+	void GoToSeeingPlayer(){		//called for transition to seeing player
 		meltTimer = 0;
 		myCanvas.enabled = false;
 		anim.SetBool("isWalking",true);
 		myNavMesh.destination = player.transform.position;
 		ai = AIState.seeingPlayer;
 	}
-	void ResetSnowman(){
+	void ResetSnowman(){			//when snowman dies
 		if(anim)
 		anim.SetBool ("isWalking", false);
 		ai = AIState.idle;
