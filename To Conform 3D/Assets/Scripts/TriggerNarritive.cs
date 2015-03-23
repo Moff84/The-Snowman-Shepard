@@ -2,23 +2,10 @@
 using System.Collections;
 
 public class TriggerNarritive : MonoBehaviour {
-	public AudioClip clip;
-	public AudioSource sound;
-	public GameObject player;
-	public static bool canPlay;
-	bool hasPlayed;
-	GameManager gameScript;
-	// Use this for initialization
-	void Start () {
-		hasPlayed = false;
-		canPlay = false;
-		gameScript = player.GetComponent<GameManager> ();
-		if (gameScript) {
-		}
-	}
-	void OnTriggerEnter(Collider col){
+
+	void OnTriggerEnter(Collider col){		// when the snowman enters the safe zone collider run the method in AITarget
 		if (col.gameObject.tag == "Snowman") {
-			col.enabled = false;
+			col.enabled = false; //stops it playing more than once on each snowman
 			AITarget aiScript = col.gameObject.GetComponent<AITarget>();
 			aiScript.GoToSafeZone();
 		}

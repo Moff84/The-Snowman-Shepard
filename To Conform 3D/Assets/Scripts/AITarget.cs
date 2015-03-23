@@ -5,12 +5,11 @@ using UnityEngine.UI;
 public class AITarget : MonoBehaviour {
 	public Canvas myCanvas;
 	public bool inSafeZone;
-	public Transform mySpawnPoint;
 	public GameObject player;
 	public AudioClip[] spottedPlayerBarks,lostPlayerBarks, safeSounds;
 	public static int spottedProgress,lostPlayerProgress;
 	AudioSource aiSound;
-	Vector3 targetScale;
+	public Vector3 targetScale,mySpawnPoint;
 	float meltTimer = 1,timeSinceLostPlayer,timeSinceSpottedPlayer;
 	public float distanceToPlayer=20;
 	NavMeshAgent myNavMesh;
@@ -23,16 +22,12 @@ public class AITarget : MonoBehaviour {
 		safe
 	}
 	void OnEnable(){
+		ResetSnowman ();
 		targetScale = Vector3.one;
-		if (mySpawnPoint) {
-			transform.position = mySpawnPoint.position;
-			transform.localScale = Vector3.one;
-			transform.rotation = mySpawnPoint.rotation;
-		}
 	}
 	AIState ai = AIState.idle;
 	void Start(){
-		mySpawnPoint = this.transform;
+		//mySpawnPoint = transform.position;
 		inSafeZone = false;
 		myCanvas.enabled = false;
 		targetScale = Vector3.one;
@@ -73,8 +68,9 @@ public class AITarget : MonoBehaviour {
 		case AIState.safe:
 			meltTimer +=Time.deltaTime;
 			if(meltTimer>=3){
+				ResetSnowman();
 				gameObject.SetActive(false);
-				transform.position = mySpawnPoint.position;
+
 			}
 			targetScale = Vector3.one;
 			break;
@@ -97,7 +93,8 @@ public class AITarget : MonoBehaviour {
 		transform.localScale = Vector3.Lerp (transform.localScale, targetScale, Time.deltaTime);
 		if (transform.localScale.y < 0.5f) {
 			GameManager.snowMenMelted++;
-			this.gameObject.SetActive(false);
+			ResetSnowman();
+			gameObject.SetActive(false);
 		}
 	}
 
@@ -131,5 +128,15 @@ public class AITarget : MonoBehaviour {
 		anim.SetBool("isWalking",true);
 		myNavMesh.destination = player.transform.position;
 		ai = AIState.seeingPlayer;
+	}
+	void ResetSnowman(){
+		if(anim)
+		anim.SetBool ("isWalking", false);
+		ai = AIState.idle;
+		myCanvas.enabled = false;
+		targetScale = Vector3.one;
+		transform.localScale = Vector3.one;
+		transform.position = mySpawnPoint;
+		//gameObject.SetActive (false);
 	}
 }

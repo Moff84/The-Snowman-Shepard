@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+//Not in use
 public class shoot : MonoBehaviour {
 	LineRenderer line;
 	Light light;
